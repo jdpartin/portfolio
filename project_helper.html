@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Project Manager</title>
+
+    <!-- Bootstrap for Styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .output-box {
+            white-space: pre-wrap;
+            background-color: #e9ecef;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Admin - Project Manager</h1>
+        <hr>
+
+        <!-- Current Projects Table -->
+        <h2>Current Projects</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Tech Stack</th>
+                    <th>Complexity</th>
+                    <th>Status</th>
+                    <th>Impact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="project-table"></tbody>
+        </table>
+
+        <hr>
+
+        <!-- Add New Project Form -->
+        <h2>Add New Project</h2>
+        <form id="project-form">
+            <input type="hidden" id="edit-id">
+            <div class="mb-3">
+                <label for="name" class="form-label">Project Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="techStack" class="form-label">Tech Stack (comma-separated)</label>
+                <input type="text" class="form-control" id="techStack" required>
+            </div>
+            <div class="mb-3">
+                <label for="complexity" class="form-label">Complexity</label>
+                <select class="form-select" id="complexity" required>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" required>
+                    <option value="Open Source">Open Source</option>
+                    <option value="Proprietary">Proprietary</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="impact" class="form-label">Impact</label>
+                <input type="text" class="form-control" id="impact">
+            </div>
+            <div class="mb-3">
+                <label for="diagram" class="form-label">Diagram URL</label>
+                <input type="text" class="form-control" id="diagram" required>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="featured">
+                <label class="form-check-label" for="featured">Featured Project</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Project</button>
+        </form>
+
+        <hr>
+
+        <!-- Generated JS Output -->
+        <h2>Generated Projects.js</h2>
+        <div class="output-box" id="output"></div>
+        <button class="btn btn-success mt-3" onclick="generateOutput()">Generate Updated JS</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="./js/projects.js"></script>
+    <script>
+        let projectData = projects || [];
+
+        function renderProjects() {
+            const table = document.getElementById('project-table');
+            table.innerHTML = projectData.map((project, index) => `
+                    <tr>
+                        <td>${project.name}</td>
+                        <td>${project.description}</td>
+                        <td>${project.techStack.join(', ')}</td>
+                        <td>${project.complexity}</td>
+                        <td>${project.status}</td>
+                        <td>${project.impact}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editProject(${index})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteProject(${index})">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+        }
+
+        function editProject(index) {
+            const project = projectData[index];
+            document.getElementById('edit-id').value = index;
+            document.getElementById('name').value = project.name;
+            document.getElementById('description').value = project.description;
+            document.getElementById('techStack').value = project.techStack.join(', ');
+            document.getElementById('complexity').value = project.complexity;
+            document.getElementById('status').value = project.status;
+            document.getElementById('impact').value = project.impact;
+            document.getElementById('diagram').value = project.diagram;
+            document.getElementById('featured').checked = project.featured;
+        }
+
+        function deleteProject(index) {
+            if (confirm("Are you sure you want to delete this project?")) {
+                projectData.splice(index, 1);
+                renderProjects();
+            }
+        }
+
+        document.getElementById('project-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const index = document.getElementById('edit-id').value;
+            const newProject = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                techStack: document.getElementById('techStack').value.split(',').map(s => s.trim()),
+                complexity: document.getElementById('complexity').value,
+                status: document.getElementById('status').value,
+                impact: document.getElementById('impact').value,
+                diagram: document.getElementById('diagram').value,
+                featured: document.getElementById('featured').checked
+            };
+            if (index !== "") {
+                projectData[index] = newProject;
+            } else {
+                projectData.push(newProject);
+            }
+            renderProjects();
+            document.getElementById('project-form').reset();
+            document.getElementById('edit-id').value = "";
+        });
+
+        function generateOutput() {
+            document.getElementById('output').textContent = `const projects = ${JSON.stringify(projectData, null, 2)};`;
+        }
+
+        renderProjects();
+    </script>
+</body>
+</html>

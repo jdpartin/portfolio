@@ -1,0 +1,71 @@
+body {
+    background-color: #f8f9fa;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.resume-btn {
+    display: inline-block;
+    background-color: white;
+    color: #007bff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+    .resume-btn:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+
+.filter-section, .contact-section {
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    border-radius: 5px;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.project-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+    .project-card:hover {
+        transform: scale(1.05);
+    }
+
+    .project-card img {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .project-card a {
+        display: block;
+        margin-top: 10px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+        .project-card a:hover {
+            color: #0056b3;
+        }
